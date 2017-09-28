@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <form method="post" class="form form-horizontal">{% csrf_token %}
+        {% for field in form %}
+        <div class="form-group">
+            <label for="{{ field.id_for_label }}" class="control-label col-sm-2">{{ field.label }}</label>
+            <div class="col-sm-4">
+                <input type="{{ field.field.widget.input_type }}" class="form-control" id="{{ field.id_for_label }}" name="{{ field.name }}">
+            </div>
+        </div>
+        {% endfor %}
+        <div class="col-sm-offset-1">
+            <button class="btn btn-default btn-lg" type="submit">Войти</button>
+        </div>
+    </form>
+{#    <a href="{% url 'register' %}">Нет аккаунта?</a>#}
+{% endblock %}

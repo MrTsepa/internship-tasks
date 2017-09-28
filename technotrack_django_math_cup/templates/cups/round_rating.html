@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block breadcrumb-lis %}
+    <li><a href="{% url 'cup-list' %}">Главная</a></li>
+    <li><a href="{% url 'round-detail' round.slug %}">{{ round.cup.name }}, {{ round.name }}</a></li>
+    <li class='active'>Рейтинг</li>
+{% endblock %}
+
+{% block content %}
+        <table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Логин</th>
+        {% for problem in problems %}
+        <th>{{ problem.key }}</th>
+        {% endfor %}
+    </tr>
+    </thead>
+    <tbody>
+    {% for user in users %}
+        <tr>
+        <th>{{ forloop.counter }}</th>
+        <th>{{ user.username }}</th>
+        {% for problem in problems %}
+            {% if user in problem.users_solved.all %}
+            <th class="success">+</th>
+            {% else %}
+            <th>-</th>
+            {% endif %}
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

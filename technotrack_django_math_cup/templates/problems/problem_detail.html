@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}{{ object.round.name }}{% endblock %}
+
+{% block breadcrumb-lis %}
+    <li><a href="{% url 'cup-list' %}">Главная</a></li>
+    <li><a href="{% url 'round-detail' object.round.slug %}">{{ object.round.cup.name }}, {{ object.round.name }}</a></li>
+    <li class='active'>{{ object.title }}</li>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ object.title }}</h1>
+    <div>{{ object.text }}</div>
+    {% if object.image %}
+        <img src="{{ object.image.url }}"/>
+    {% endif %}
+    <br/>
+    <form method="post" class="form form-horizontal">{% csrf_token %}
+        <div class="form-group">
+            <label for="answer_input_id" class="control-label col-sm-2">Ваш ответ:</label>
+            <div class="col-sm-6">
+                <input class="form-control" id="answer_input_id" name="answer">
+            </div>
+            <div class="col-sm-2">
+                <button class="btn btn-default" type="submit">Отправить</button>
+            </div>
+        </div>
+    </form>
+    <table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Дата</th>
+        <th>Статус</th>
+        <th>Ответ</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for answer in user_answers %}
+        <tr class="{% if answer.status == 'OK' %}success{% endif %}">
+        <th>{{ answer.id }}</th>
+        <th>{{ answer.created_at }}</th>
+        <th>{{ answer.status }}</th>
+        <th>{{ answer.value }}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

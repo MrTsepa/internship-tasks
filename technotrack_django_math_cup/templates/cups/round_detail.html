@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% load problem_tags %}
+
+{% block title %}{{ object.name }}{% endblock %}
+
+{% block breadcrumb-lis %}
+    <li><a href="{% url 'cup-list' %}">Главная</a></li>
+    <li class='active'>{{ object.cup.name }}, {{ object.name }}</li>
+{% endblock %}
+
+{% block content %}
+    <h1>{{ object.name }}</h1>
+    <h3><a href="{% url 'round-rating' object.slug %}">Рейтинг</a></h3>
+    <table class="table">
+    <thead>
+    <tr>
+        <th>#</th>
+        <th>Задача</th>
+        <th>Дата последней попытки</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for problem in object.problem_set.all %}
+        {% get_status problem request.user as status %}
+        {% last_updated problem request.user as last_answer_date %}
+        <tr class="{% if status == 'solved' %}success{% elif status == 'failed' %}danger{% endif %}">
+        <th>{{ problem.key }}</th>
+        <th><a href="{% url 'problem-detail' object.slug problem.key %}">{{ problem.title }}</a></th>
+        <th>{% if status != 'empty' %}{{ last_answer_date }}{% else %}Нет попыток{% endif %}</th>
+        </tr>
+    {% endfor %}
+    </tbody>
+    </table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+
+{% block breadcrumb-lis %}
+    <li class='active'>Главная</li>
+{% endblock %}
+
+{% block content %}
+<h1>Соревнования</h1>
+    {% for cup in object_list %}
+    <h3>{{ cup.name }}</h3>
+        <table class="table">
+        <thead>
+        <tr>
+            <th>#</th>
+            <th>Начало</th>
+            <th>Конец</th>
+            <th></th>
+        </tr>
+        </thead>
+        {% for round in cup.round_set.all %}
+            <tr>
+            <th><a href="{% url 'round-detail' round.slug %}">{{ round.name }}</a></th>
+            <th>{{ round.start_at }}</th>
+            <th>{{ round.end_at }}</th>
+            <th><a href="{% url 'round-rating' round.slug %}">Рейтинг</a></th>
+            </tr>
+        {% endfor %}
+        </table>
+{% empty %}
+    <li>Нет доступных соревнований</li>
+{% endfor %}
+{% endblock %}
